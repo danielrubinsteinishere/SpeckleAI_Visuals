@@ -20,6 +20,7 @@ def plot_subject_metrics(metrics_dict, subject_prefix="", colormap=None, color=[
       Set2 — softer presentation colors
       tab10 — strong distinct category colors
     custom caolors examples:
+      Is used only when colormap=None
       color=["navy", "orange", "green"]
     """
     if not metrics_dict:
