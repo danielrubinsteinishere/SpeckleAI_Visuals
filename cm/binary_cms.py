@@ -17,6 +17,19 @@ def test_cm_percents_sum_to_200(cm_percents, tol=1e-6):
 
 
 ''' multiple binary confusion matruces per plot '''
+'''
+sample usage:
+import numpy as np
+cms = [np.array([[500,  0],
+              [ 2, 498]])]
+# order: 
+#[[TN, FP],
+# [FN, TP]]
+
+create_image_with_multiple_binary_confusion_matrices(cms=cms, captions=None,n_cols=1,
+                    class_names=["English", "Swedish"], color_map='Blues') # A single cm will be created
+The number of created cms are determined by cms list.
+'''
 def create_image_with_multiple_binary_confusion_matrices(cms, captions=None, n_cols=3, class_names=None, color_map=None):
     '''
     color_map parameter:
