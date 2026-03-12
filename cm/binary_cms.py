@@ -110,3 +110,10 @@ def create_image_with_multiple_binary_confusion_matrices(cms, captions=None, n_c
     plt.tight_layout()
     plt.subplots_adjust(hspace=0.4)
     plt.show()
+
+def create_image_with_mean_binary_confusion_matrix(cms=cms, captions=None,
+                    class_names=None, color_map='Blues'):
+  cms_mean = []
+  cms_mean = [np.round(np.mean(np.stack(cms), axis=0)).astype(int)]
+  create_image_with_multiple_binary_confusion_matrices(cms=cms_mean, captions=None,n_cols=1,
+                      class_names=class_names, color_map=color_map)
