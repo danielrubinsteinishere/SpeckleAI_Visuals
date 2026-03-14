@@ -39,7 +39,7 @@ def macro_F1_from_cm(cm):
     macro_f1 = f1_per_class.mean()
     return macro_f1, f1_per_class
 
-def macro_f1_accuracy_from_cm(cm):
+def macro_F1_accuracy_from_cm(cm):
     tp, fp, fn, tn = get_tp_fp_fn_tn(cm) 
     precision, recall = get_precision_and_recal(tp, fp, fn)
     f1_per_class = get_F1_per_class(precision, recal)
