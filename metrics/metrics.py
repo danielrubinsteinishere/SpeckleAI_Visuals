@@ -39,11 +39,18 @@ def macro_F1_from_cm(cm):
     macro_f1 = f1_per_class.mean()
     return macro_f1, f1_per_class
 
+def overall_accuracy(cm):
+    return np.trace(cm) / cm.sum()
+
+def balanced_accuracy(cm):
+    recall_per_class = np.diag(cm) / cm.sum(axis=1)
+    return recall_per_class.mean()
+    
 def macro_F1_accuracy_from_cm(cm):
     tp, fp, fn, tn = get_tp_fp_fn_tn(cm) 
     p, r = get_precision_and_recall(tp, fp, fn) 
     f1_per_class = get_F1_per_class(p, r)
-    acc_per_class = get_accuracy_per_class(tp, fp, fn, tn)
+    acc_per_class = overall_accuracy(cm) #get_accuracy_per_class(tp, fp, fn, tn)
     macro_f1 = f1_per_class.mean()
     macro_acc = acc_per_class.mean()
     return macro_f1, macro_acc, f1_per_class, acc_per_class
