@@ -15,7 +15,7 @@ def get_precision_and_recal(tp, fp, fn):
     recall = np.divide(tp, tp + fn, out=np.zeros_like(tp), where=(tp + fn) != 0)
     return precision, recall
 
-def get_F1_per_class(precision, recal):
+def get_F1_per_class(precision, recall):
     f1_per_class = np.divide(
         2 * precision * recall,
         precision + recall,
@@ -34,15 +34,13 @@ def get_accuracy_per_class(tp, fp, fn, tn):
     
 def macro_F1_from_cm(cm):
     tp, fp, fn, tn = get_tp_fp_fn_tn(cm) 
-    precision, recall = get_precision_and_recal(tp, fp, fn)
-    f1_per_class = get_F1_per_class(precision, recal)
+    f1_per_class = get_F1_per_class(get_precision_and_recal(tp, fp, fn))
     macro_f1 = f1_per_class.mean()
     return macro_f1, f1_per_class
 
 def macro_F1_accuracy_from_cm(cm):
     tp, fp, fn, tn = get_tp_fp_fn_tn(cm) 
-    precision, recall = get_precision_and_recal(tp, fp, fn)
-    f1_per_class = get_F1_per_class(precision, recal)
+    f1_per_class = get_F1_per_class(get_precision_and_recal(tp, fp, fn))
     acc_per_class = get_accuracy_per_class(tp, fp, fn, tn)
     macro_f1 = f1_per_class.mean()
     macro_acc = acc_per_class.mean()
