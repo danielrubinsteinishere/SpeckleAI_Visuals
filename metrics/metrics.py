@@ -68,4 +68,4 @@ def calc_mean_acc_and_F1(cms):
 
     macro_f1_list = [round(x, 3) for x in macro_f1_list]
     macro_acc_list = [round(x, 3) for x in macro_acc_list]
-    return macro_f1_list, macro_acc_list, round(mean_macro_f1,3), round(mean_macro_acc, 3)
+    return macro_f1_list, macro_acc_list, round(mean_macro_f1,3), round(mean_macro_acc, 4)
