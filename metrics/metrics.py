@@ -47,3 +47,25 @@ def macro_F1_accuracy_from_cm(cm):
     macro_f1 = f1_per_class.mean()
     macro_acc = acc_per_class.mean()
     return macro_f1, macro_acc, f1_per_class, acc_per_class
+
+
+''' Mean values '''
+def create_mean_cm(cms):
+  return [np.round(np.mean(np.stack(cms), axis=0)).astype(int)]
+
+def calc_mean_acc_and_F1(cms):
+    macro_f1_list = []
+    macro_acc_list = []
+
+    for cm in cms:
+        macro_f1, macro_acc, f1_per_class, acc_per_class = macro_F1_accuracy_from_cm(cm)
+        #macro_f1, f1_per_class = macro_F1_from_cm(cm)
+        macro_f1_list.append(macro_f1)
+        macro_acc_list.append(macro_acc)
+
+    mean_macro_f1 = np.mean(np.array(macro_f1_list))
+    mean_macro_acc = np.mean(np.array(macro_acc_list))
+
+    macro_f1_list = [round(x, 3) for x in macro_f1_list]
+    macro_acc_list = [round(x, 3) for x in macro_acc_list]
+    return macro_f1_list, macro_acc_list, round(mean_macro_f1,3), round(mean_macro_acc, 3)
