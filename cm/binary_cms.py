@@ -117,3 +117,74 @@ def create_image_with_mean_binary_confusion_matrix(cms, captions=None,
   cms_mean = [np.round(np.mean(np.stack(cms), axis=0)).astype(int)]
   create_image_with_multiple_binary_confusion_matrices(cms=cms_mean, captions=None, n_cols=1,
                       class_names=class_names, color_map=color_map)
+
+
+
+def plot_binary_confusion_matrix_from_cm(
+    cm,
+    class_names=("class_0", "class_1"),
+    normalize="true",
+    cmap="Blues",
+    title="Confusion Matrix (%)",
+    show_counts=True,
+    font_size=16,
+):
+    """
+    Plot a 2x2 confusion matrix where color intensity is based on percentages.
+    """
+    cm = np.asarray(cm, dtype=float)
+
+    if cm.shape != (2, 2):
+        raise ValueError(f"Expected cm shape (2, 2), got {cm.shape}")
+
+    if normalize == "true":
+        row_sums = cm.sum(axis=1, keepdims=True)
+        cm_pct = np.divide(cm, row_sums, out=np.zeros_like(cm), where=row_sums != 0) * 100.0
+    elif normalize == "all":
+        total = cm.sum()
+        cm_pct = (cm / total) * 100.0 if total > 0 else np.zeros_like(cm)
+    else:
+        raise ValueError("normalize must be 'true' or 'all'")
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+
+    im = ax.imshow(cm_pct, interpolation="nearest", cmap=cmap, vmin=0, vmax=100)
+    cbar = plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cbar.set_label("Percent", fontsize=font_size)
+    cbar.ax.tick_params(labelsize=font_size)
+
+    ax.set(
+        xticks=np.arange(2),
+        yticks=np.arange(2),
+        xticklabels=class_names,
+        yticklabels=class_names,
+        xlabel="Predicted label",
+        ylabel="True label",
+        title=title,
+    )
+
+    ax.set_xlabel("Predicted label", fontsize=font_size)
+    ax.set_ylabel("True label", fontsize=font_size)
+    ax.set_title(title, fontsize=font_size)
+    ax.tick_params(axis="both", labelsize=font_size)
+
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+    thresh = 50.0
+    for i in range(2):
+        for j in range(2):
+            text = f"{cm_pct[i, j]:.1f}%"
+            if show_counts:
+                text = f"{int(cm[i, j])}\n({cm_pct[i, j]:.1f}%)"
+
+            ax.text(
+                j, i, text,
+                ha="center", va="center",
+                color="white" if cm_pct[i, j] >= thresh else "black",
+                fontsize=font_size
+            )
+
+    plt.tight_layout()
+    plt.show()
+
+    return cm_pct
